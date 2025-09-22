@@ -16,6 +16,15 @@ dist/
 .env.development.local
 .env.test.local
 .env.production.local
+backend/.env
+frontend/.env
+
+# Google Cloud credentials
+service-account.json
+**/service-account.json
+credentials.json
+**/credentials.json
+*.key.json
 
 # Logs
 npm-debug.log*
