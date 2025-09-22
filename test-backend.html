@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Backend Connection Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+        pre { background: #f0f0f0; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Backend Connection Test</h1>
+    <button onclick="testBackend()">Test Backend Connection</button>
+    <div id="results"></div>
+    
+    <script>
+        async function testBackend() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>Testing...</h2>';
+            
+            let html = '';
+            
+            // Test health endpoint
+            try {
+                const healthResponse = await fetch('http://localhost:5001/api/health');
+                const healthData = await healthResponse.json();
+                html += '<div class="success">✅ Health Check: ' + JSON.stringify(healthData) + '</div>';
+            } catch (error) {
+                html += '<div class="error">❌ Health Check Failed: ' + error.message + '</div>';
+            }
+            
+            // Test auth status
+            try {
+                const authResponse = await fetch('http://localhost:5001/api/auth/server-status');
+                const authData = await authResponse.json();
+                html += '<div class="success">✅ Auth Status: <pre>' + JSON.stringify(authData, null, 2) + '</pre></div>';
+                
+                if (authData.serverAuthenticated) {
+                    html += '<div class="success">🎉 Server authentication is active! No login required!</div>';
+                }
+            } catch (error) {
+                html += '<div class="error">❌ Auth Status Failed: ' + error.message + '</div>';
+            }
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        // Auto-test on load
+        testBackend();
+    </script>
+</body>
+</html>

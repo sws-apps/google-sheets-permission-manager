@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Direct Test - Google Sheets Processor</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; }
+        #results { margin-top: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Direct Google Sheets Processor Test</h1>
+    <p>This bypasses the React app to test the backend directly.</p>
+    
+    <button onclick="processSheets()">Process Test Sheets</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        const testLinks = [
+            'https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit',
+            'https://docs.google.com/spreadsheets/d/1Z-1XJM6Zm53_cJF2V_C8S6fKZGwPqZ9YdrqYKwCkPRY/edit'
+        ];
+        
+        async function processSheets() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>Processing...</p>';
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/process/sheets', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        links: testLinks,
+                        useServerAuth: true
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to process');
+                }
+                
+                let html = '<h2>Results:</h2>';
+                html += `<p>Auth Mode: ${data.authMode}</p>`;
+                html += `<p>Total: ${data.summary.total}, Success: ${data.summary.successful}, Failed: ${data.summary.failed}</p>`;
+                html += '<ul>';
+                
+                data.results.forEach(result => {
+                    if (result.status === 'success') {
+                        html += `<li class="success">✅ ${result.originalUrl} → ${result.newUrl}</li>`;
+                    } else {
+                        html += `<li class="error">❌ ${result.originalUrl} - ${result.error}</li>`;
+                    }
+                });
+                
+                html += '</ul>';
+                resultsDiv.innerHTML = html;
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

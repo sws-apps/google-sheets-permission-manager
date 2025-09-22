@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Auth Status</title>
+</head>
+<body>
+    <h1>Debug Authentication Status</h1>
+    <div id="status">Checking...</div>
+    
+    <script>
+        async function checkAuth() {
+            try {
+                const response = await fetch('http://localhost:5001/api/auth/server-status');
+                const data = await response.json();
+                document.getElementById('status').innerHTML = `
+                    <h2>Server Response:</h2>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                    <p>Server Authenticated: ${data.serverAuthenticated ? '✅ YES' : '❌ NO'}</p>
+                    <p>Message: ${data.message}</p>
+                `;
+            } catch (error) {
+                document.getElementById('status').innerHTML = `
+                    <h2>Error:</h2>
+                    <pre>${error.toString()}</pre>
+                `;
+            }
+        }
+        
+        checkAuth();
+    </script>
+</body>
+</html>

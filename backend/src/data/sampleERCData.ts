@@ -1,0 +1,297 @@
+// Sample ERC data for testing and demo purposes
+import { TransformedERCData } from '../services/dataTransformer';
+
+export const sampleERCData: TransformedERCData = {
+  companyInfo: {
+    ein: '52-1234567',
+    legalName: 'Sample Company LLC',
+    tradeName: 'Sample Company',
+    address: {
+      line1: '123 Main St',
+      line2: 'Suite 100',
+      city: 'Elizabeth City',
+      state: 'NC',
+      zip: '27909'
+    },
+    // Contact Information (typically not available in ERC templates)
+    contactFirstName: undefined,
+    contactLastName: undefined,
+    contactJobTitle: undefined,
+    mainPhone: undefined,
+    email: undefined,
+    // Business Details
+    industry: undefined,
+    website: undefined,
+    filerRemarks: 'Sample test data for ERC processing',
+    fullTimeW2Count2019: 25,
+    fullTimeW2Count2020: 20,
+    fullTimeW2Count2021: 22,
+    fullTimeEmployees: 22
+  },
+  qualifyingQuestions: {
+    2020: {
+      Q1: {
+        governmentShutdown: false,
+        inabilityToMeet: false,
+        supplyDisruptions: false,
+        vendorDisruptions: false,
+        revenueReduction10Percent: false,
+        revenueReduction20Percent: false,
+        recoveryStartupBusiness: false,
+        severelyDistressedEmployer: false
+      },
+      Q2: {
+        governmentShutdown: true,
+        inabilityToMeet: true,
+        supplyDisruptions: true,
+        vendorDisruptions: false,
+        revenueReduction10Percent: false,
+        revenueReduction20Percent: true,
+        recoveryStartupBusiness: false,
+        severelyDistressedEmployer: false
+      },
+      Q3: {
+        governmentShutdown: true,
+        inabilityToMeet: true,
+        supplyDisruptions: true,
+        vendorDisruptions: true,
+        revenueReduction10Percent: false,
+        revenueReduction20Percent: true,
+        recoveryStartupBusiness: false,
+        severelyDistressedEmployer: false
+      },
+      Q4: {
+        governmentShutdown: true,
+        inabilityToMeet: false,
+        supplyDisruptions: true,
+        vendorDisruptions: false,
+        revenueReduction10Percent: false,
+        revenueReduction20Percent: false,
+        recoveryStartupBusiness: false,
+        severelyDistressedEmployer: false
+      }
+    },
+    2021: {
+      Q1: {
+        governmentShutdown: false,
+        inabilityToMeet: false,
+        supplyDisruptions: true,
+        vendorDisruptions: false,
+        revenueReduction10Percent: true,
+        revenueReduction20Percent: false,
+        recoveryStartupBusiness: false,
+        severelyDistressedEmployer: false
+      },
+      Q2: {
+        governmentShutdown: false,
+        inabilityToMeet: false,
+        supplyDisruptions: true,
+        vendorDisruptions: false,
+        revenueReduction10Percent: true,
+        revenueReduction20Percent: false,
+        recoveryStartupBusiness: false,
+        severelyDistressedEmployer: false
+      },
+      Q3: {
+        governmentShutdown: false,
+        inabilityToMeet: false,
+        supplyDisruptions: false,
+        vendorDisruptions: false,
+        revenueReduction10Percent: false,
+        revenueReduction20Percent: false,
+        recoveryStartupBusiness: false,
+        severelyDistressedEmployer: false
+      }
+    }
+  },
+  revenueReductionQuestions: {
+    reduction50_2020: true,
+    reduction20_2021: true,
+    ownOtherBusiness: false
+  },
+  shutdownStandards: {
+    fullShutdowns: true,
+    partialShutdowns: true,
+    interruptedOperations: true,
+    supplyChainInterruptions: true,
+    inabilityAccessEquipment: false,
+    limitedCapacity: true,
+    inabilityWorkVendors: false,
+    reductionServices: true,
+    cutDownHours: true,
+    shiftingHoursSanitation: true,
+    challengesFindingEmployees: true,
+    otherComments: 'Sample COVID-19 impacts on business operations'
+  },
+  grossReceipts: {
+    2019: {
+      Q1: 500000,
+      Q2: 550000,
+      Q3: 525000,
+      Q4: 575000
+    },
+    2020: {
+      Q1: 450000,
+      Q2: 250000,
+      Q3: 275000,
+      Q4: 400000
+    },
+    2021: {
+      Q1: 425000,
+      Q2: 475000,
+      Q3: 500000,
+      Q4: 525000
+    }
+  },
+  pppInformation: {
+    ppp1ForgivenessAmount: 79515,
+    ppp2ForgivenessAmount: 130038
+  },
+  ownershipStructure: {
+    ownerName: 'John Smith',
+    ownerPercentage: 75
+  },
+  form941Data: {
+    2020: {
+      Q1: {
+        employeeCount: 25,
+        totalWages: 375000,
+        federalTaxWithheld: 45000,
+        qualifiedSickWages: 0,
+        qualifiedFamilyLeaveWages: 0,
+        retentionCreditWages: 0,
+        qualifiedHealthPlanExpenses: 0,
+        form5884Credit: 0
+      },
+      Q2: {
+        employeeCount: 20,
+        totalWages: 300000,
+        federalTaxWithheld: 36000,
+        qualifiedSickWages: 5000,
+        qualifiedFamilyLeaveWages: 3000,
+        retentionCreditWages: 50000,
+        qualifiedHealthPlanExpenses: 10000,
+        form5884Credit: 0
+      },
+      Q3: {
+        employeeCount: 20,
+        totalWages: 310000,
+        federalTaxWithheld: 37200,
+        qualifiedSickWages: 2000,
+        qualifiedFamilyLeaveWages: 1000,
+        retentionCreditWages: 100000,
+        qualifiedHealthPlanExpenses: 10000,
+        form5884Credit: 0
+      },
+      Q4: {
+        employeeCount: 22,
+        totalWages: 340000,
+        federalTaxWithheld: 40800,
+        qualifiedSickWages: 0,
+        qualifiedFamilyLeaveWages: 0,
+        retentionCreditWages: 70000,
+        qualifiedHealthPlanExpenses: 10000,
+        form5884Credit: 0
+      }
+    },
+    2021: {
+      Q1: {
+        employeeCount: 22,
+        totalWages: 350000,
+        federalTaxWithheld: 42000,
+        qualifiedSickWages: 0,
+        qualifiedFamilyLeaveWages: 0,
+        retentionCreditWages: 140000,
+        qualifiedHealthPlanExpenses: 12000,
+        form5884Credit: 0
+      },
+      Q2: {
+        employeeCount: 22,
+        totalWages: 355000,
+        federalTaxWithheld: 42600,
+        qualifiedSickWages: 0,
+        qualifiedFamilyLeaveWages: 0,
+        retentionCreditWages: 140000,
+        qualifiedHealthPlanExpenses: 12000,
+        form5884Credit: 0
+      },
+      Q3: {
+        employeeCount: 22,
+        totalWages: 360000,
+        federalTaxWithheld: 43200,
+        qualifiedSickWages: 0,
+        qualifiedFamilyLeaveWages: 0,
+        retentionCreditWages: 0,
+        qualifiedHealthPlanExpenses: 12000,
+        form5884Credit: 0
+      },
+      Q4: {
+        employeeCount: 22,
+        totalWages: 365000,
+        federalTaxWithheld: 43800,
+        qualifiedSickWages: 0,
+        qualifiedFamilyLeaveWages: 0,
+        retentionCreditWages: 0,
+        qualifiedHealthPlanExpenses: 12000,
+        form5884Credit: 0
+      }
+    }
+  },
+  quarterlyEmployeeCounts: {
+    2020: { Q1: 25, Q2: 20, Q3: 20, Q4: 22 },
+    2021: { Q1: 22, Q2: 22, Q3: 22, Q4: 22 }
+  },
+  quarterlyTaxableWages: {
+    2020: { Q1: 375000, Q2: 300000, Q3: 310000, Q4: 340000 },
+    2021: { Q1: 350000, Q2: 355000, Q3: 360000, Q4: 365000 }
+  },
+  form940Data: {
+    2020: {
+      totalPayments: 1325000,
+      exemptPayments: 0,
+      exemptPaymentsBreakdown: {
+        retirement: 0,
+        groupLifeInsurance: 0,
+        dependentCare: 0,
+        other: 0
+      },
+      excessPayments: 0,
+      subtotal: 1325000,
+      taxableFutaWages: 175000,
+      futaTax: 1050
+    },
+    2021: {
+      totalPayments: 1430000,
+      exemptPayments: 0,
+      exemptPaymentsBreakdown: {
+        retirement: 0,
+        groupLifeInsurance: 0,
+        dependentCare: 0,
+        other: 0
+      },
+      excessPayments: 0,
+      subtotal: 1430000,
+      taxableFutaWages: 154000,
+      futaTax: 924
+    }
+  },
+  statePayrollTaxes: {
+    2020: {
+      Q1: { suiTaxableWages: 175000, suiTaxRate: 0.034, suiTaxAmount: 5950, sdiTaxableWages: 0, sdiTaxAmount: 0 },
+      Q2: { suiTaxableWages: 0, suiTaxRate: 0.034, suiTaxAmount: 0, sdiTaxableWages: 0, sdiTaxAmount: 0 },
+      Q3: { suiTaxableWages: 0, suiTaxRate: 0.034, suiTaxAmount: 0, sdiTaxableWages: 0, sdiTaxAmount: 0 },
+      Q4: { suiTaxableWages: 0, suiTaxRate: 0.034, suiTaxAmount: 0, sdiTaxableWages: 0, sdiTaxAmount: 0 }
+    },
+    2021: {
+      Q1: { suiTaxableWages: 154000, suiTaxRate: 0.034, suiTaxAmount: 5236, sdiTaxableWages: 0, sdiTaxAmount: 0 },
+      Q2: { suiTaxableWages: 0, suiTaxRate: 0.034, suiTaxAmount: 0, sdiTaxableWages: 0, sdiTaxAmount: 0 },
+      Q3: { suiTaxableWages: 0, suiTaxRate: 0.034, suiTaxAmount: 0, sdiTaxableWages: 0, sdiTaxAmount: 0 },
+      Q4: { suiTaxableWages: 0, suiTaxRate: 0.034, suiTaxAmount: 0, sdiTaxableWages: 0, sdiTaxAmount: 0 }
+    }
+  },
+  metadata: {
+    extractionDate: new Date(),
+    templateVersion: '1.0',
+    validationStatus: 'valid'
+  }
+};

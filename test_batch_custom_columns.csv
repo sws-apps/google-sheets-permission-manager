@@ -1,0 +1,3 @@
+google_sheets_url,company_name,contact_first_name,contact_last_name,email,main_phone,job_title,ein,tax_year,preparer_name,status,notes
+https://docs.google.com/spreadsheets/d/1PyoaD9kMwqxSwf1XY8QxRKq0Ld2Q9PUnSMBmJQP1Qus/edit,Acme Corporation,John,Smith,john.smith@acme.com,555-1234,CEO,12-3456789,2021,TaxPro Inc,Pending,Test company 1
+https://docs.google.com/spreadsheets/d/1PyoaD9kMwqxSwf1XY8QxRKq0Ld2Q9PUnSMBmJQP1Qus/edit,Beta Industries,Sarah,Johnson,sarah@beta.com,555-5678,CFO,98-7654321,2021,TaxPro Inc,In Review,Test company 2

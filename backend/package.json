@@ -1,0 +1,46 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "get-tokens": "ts-node src/scripts/getTokens.ts",
+    "get-tokens-manual": "ts-node src/scripts/getTokensManual.ts",
+    "get-tokens-account": "ts-node src/scripts/getTokensWithAccount.ts",
+    "test-auth": "ts-node src/scripts/testAuth.ts",
+    "show-redirect-uri": "ts-node src/scripts/showRedirectUri.ts",
+    "verify-oauth": "ts-node src/scripts/verifyOAuth.ts",
+    "test-service": "ts-node src/scripts/testServiceAccount.ts",
+    "cleanup": "ts-node src/scripts/cleanupDrive.ts",
+    "test-template": "ts-node src/scripts/testTemplateExtraction.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.0.15",
+    "@types/uuid": "^10.0.0",
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "csv-parse": "^6.1.0",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "googleapis": "^153.0.0",
+    "multer": "^2.0.2",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "uuid": "^11.1.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.4"
+  }
+}

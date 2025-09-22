@@ -1,0 +1,3 @@
+google_sheets_url,contact_first_name,contact_last_name,email,ein,2Q20 Amount,3Q20 Amount,4Q20 Amount,1Q21 Amount,2Q21 Amount,3Q21 Amount,2Q20 Qualification,3Q20 Qualification,4Q20 Qualification,1Q21 Qualification,2Q21 Qualification,3Q21 Qualification
+https://docs.google.com/spreadsheets/d/TEST_SHEET_ID/edit,John,Doe,john@example.com,12-3456789,50212.77,79131.99,70264.28,85421.50,92114.33,75892.15,Yes,Yes,Yes,Yes,Yes,Yes
+https://docs.google.com/spreadsheets/d/TEST_SHEET_ID_2/edit,Jane,Smith,jane@example.com,98-7654321,35000.00,42000.00,0,51000.00,48500.00,0,Yes,Yes,No,Yes,Yes,No
