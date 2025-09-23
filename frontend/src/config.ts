@@ -2,8 +2,9 @@
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 // Use environment variable or fallback to localhost
+// In production, REACT_APP_API_URL must be set to the backend URL
 export const API_BASE_URL = process.env.REACT_APP_API_URL || 
-  (isDevelopment ? 'http://localhost:5001' : window.location.origin);
+  (isDevelopment ? 'http://localhost:5001' : '');
 
 export const API_ENDPOINTS = {
   // Auth endpoints
