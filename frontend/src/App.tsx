@@ -24,7 +24,7 @@ import { TemplateProcessor } from './components/TemplateProcessor';
 import { BatchProcessor } from './components/BatchProcessor';
 import { DrivePicker } from './components/DrivePicker';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
-import { BrowserRouter as Router, Routes, Route, Link as RouterLink } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -263,19 +263,18 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AuthProvider>
           <Routes>
             <Route path="/" element={<AppContent />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/privacy.html" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<PrivacyPolicy />} /> {/* Temporary - you can create a separate Terms component later */}
+            <Route path="/terms" element={<PrivacyPolicy />} />
           </Routes>
         </AuthProvider>
       </ThemeProvider>
-    </Router>
+    </BrowserRouter>
   );
 }
 
