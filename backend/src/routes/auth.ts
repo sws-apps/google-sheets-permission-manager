@@ -7,13 +7,32 @@ dotenv.config();
 
 const router = Router();
 
+// Construct redirect URI dynamically if not set
+const getRedirectUri = () => {
+  if (process.env.GOOGLE_REDIRECT_URI) {
+    return process.env.GOOGLE_REDIRECT_URI;
+  }
+  
+  // In production, use the production URL
+  if (process.env.NODE_ENV === 'production') {
+    return 'https://google-sheets-permission-manager-production.up.railway.app/api/auth/google/callback';
+  }
+  
+  // In development, use localhost
+  const port = process.env.PORT || 5000;
+  return `http://localhost:${port}/api/auth/google/callback`;
+};
+
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_REDIRECT_URI
+  getRedirectUri()
 );
 
-const scopes = process.env.GOOGLE_SCOPES?.split(' ') || [];
+const scopes = process.env.GOOGLE_SCOPES?.split(' ') || [
+  'https://www.googleapis.com/auth/drive',
+  'https://www.googleapis.com/auth/spreadsheets'
+];
 
 router.get('/google', (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({
