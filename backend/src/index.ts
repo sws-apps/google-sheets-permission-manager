@@ -63,25 +63,34 @@ app.get('/api/health', (req, res) => {
 // Initialize Google service on startup
 const startServer = async () => {
   try {
-    // Try service account first (easier!)
-    await initServiceAccount();
+    // Skip service account initialization in production if not available
+    if (process.env.NODE_ENV !== 'production') {
+      try {
+        await initServiceAccount();
+      } catch (error) {
+        console.log('Service account not found, using OAuth instead');
+      }
+    }
     
-    // Fall back to OAuth if no service account
-    if (!process.env.GOOGLE_REFRESH_TOKEN) {
-      console.log('💡 TIP: Using a service account is easier than OAuth!');
-      console.log('   1. Create a service account in Google Cloud Console');
-      console.log('   2. Download the JSON key as service-account.json');
-      console.log('   3. Share your sheets with the service account email');
-    } else {
+    // Use OAuth if refresh token is available
+    if (process.env.GOOGLE_REFRESH_TOKEN) {
       await initializeServiceAccount();
-      console.log('✅ OAuth authentication initialized');
+      console.log('✅ OAuth authentication initialized with refresh token');
+    } else if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+      console.log('✅ OAuth authentication configured');
+      console.log('   Users will authenticate with Google when they sign in');
+    } else {
+      console.log('⚠️ No authentication configured');
+      console.log('   Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in environment variables');
     }
   } catch (error) {
-    console.error('Failed to initialize Google service:', error);
+    console.error('Warning: Google service initialization:', error);
+    console.log('Continuing with OAuth user authentication...');
   }
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log(`Health check available at: http://localhost:${PORT}/api/health`);
   });
 };
 

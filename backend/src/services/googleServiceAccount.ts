@@ -11,8 +11,11 @@ export const initializeServiceAccount = async (): Promise<void> => {
     const keyPath = path.join(__dirname, '../../service-account.json');
     
     if (!fs.existsSync(keyPath)) {
-      console.warn('No service account key file found at:', keyPath);
-      console.warn('Download it from Google Cloud Console and save as service-account.json');
+      // Only show warning in development
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('No service account key file found at:', keyPath);
+        console.warn('Download it from Google Cloud Console and save as service-account.json');
+      }
       return;
     }
 
