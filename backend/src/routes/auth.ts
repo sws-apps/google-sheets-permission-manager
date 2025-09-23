@@ -60,7 +60,11 @@ router.get('/google/callback', async (req, res) => {
 
   if (error) {
     console.error('OAuth error:', error);
-    return res.redirect(`${process.env.FRONTEND_URL}/auth/error?message=${error}`);
+    const frontendUrl = process.env.FRONTEND_URL || 
+      (process.env.NODE_ENV === 'production' 
+        ? 'https://frontend-production-54d6.up.railway.app' 
+        : 'http://localhost:3000');
+    return res.redirect(`${frontendUrl}?error=${error}`);
   }
 
   if (!code || typeof code !== 'string') {
@@ -78,7 +82,11 @@ router.get('/google/callback', async (req, res) => {
         </html>
       `);
     }
-    return res.redirect(`${process.env.FRONTEND_URL}/auth/error?message=No authorization code provided`);
+    const frontendUrl = process.env.FRONTEND_URL || 
+      (process.env.NODE_ENV === 'production' 
+        ? 'https://frontend-production-54d6.up.railway.app' 
+        : 'http://localhost:3000');
+    return res.redirect(`${frontendUrl}?error=No authorization code provided`);
   }
 
   // Check if this is from the get-tokens script (show code on page)
@@ -101,16 +109,26 @@ router.get('/google/callback', async (req, res) => {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
 
-    // In production, you'd want to store these tokens securely
-    // For now, we'll send them to the frontend
-    const redirectUrl = new URL(`${process.env.FRONTEND_URL}/auth/success`);
+    // Determine frontend URL
+    const frontendUrl = process.env.FRONTEND_URL || 
+      (process.env.NODE_ENV === 'production' 
+        ? 'https://frontend-production-54d6.up.railway.app' 
+        : 'http://localhost:3000');
+
+    // Redirect to frontend with tokens in URL params
+    const redirectUrl = new URL(frontendUrl);
     redirectUrl.searchParams.append('access_token', tokens.access_token || '');
     redirectUrl.searchParams.append('refresh_token', tokens.refresh_token || '');
     
+    console.log('Redirecting to frontend with tokens');
     res.redirect(redirectUrl.toString());
   } catch (error) {
     console.error('Error exchanging code for tokens:', error);
-    res.redirect(`${process.env.FRONTEND_URL}/auth/error?message=Failed to authenticate`);
+    const frontendUrl = process.env.FRONTEND_URL || 
+      (process.env.NODE_ENV === 'production' 
+        ? 'https://frontend-production-54d6.up.railway.app' 
+        : 'http://localhost:3000');
+    res.redirect(`${frontendUrl}?error=Failed to authenticate`);
   }
 });
 
