@@ -16,12 +16,13 @@ import {
   Chip,
   Alert
 } from '@mui/material';
-import { Google, Logout, Lock, LockOpen } from '@mui/icons-material';
+import { Google, Logout, Lock, LockOpen, CloudUpload, FolderOpen } from '@mui/icons-material';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { FileUpload } from './components/FileUpload';
 import { ProcessSheets } from './components/ProcessSheets';
 import { TemplateProcessor } from './components/TemplateProcessor';
 import { BatchProcessor } from './components/BatchProcessor';
+import { DrivePicker } from './components/DrivePicker';
 
 const theme = createTheme({
   palette: {
@@ -40,6 +41,7 @@ function AppContent() {
   const [extractedLinks, setExtractedLinks] = useState<string[]>([]);
   const [mode, setMode] = useState<'sheets' | 'erc'>('erc');
   const [ercSubMode, setErcSubMode] = useState<'single' | 'batch'>('single');
+  const [drivePickerOpen, setDrivePickerOpen] = useState(false);
 
   // Dynamic steps based on auth mode
   const steps = serverAuthenticated 
@@ -58,6 +60,15 @@ function AppContent() {
 
   const handleLinksExtracted = (links: string[]) => {
     setExtractedLinks(links);
+    if (links.length > 0) {
+      setActiveStep(serverAuthenticated ? 1 : 2);
+    }
+  };
+
+  const handleDriveFilesSelected = (files: any[]) => {
+    const links = files.map(file => file.webViewLink);
+    setExtractedLinks(prev => [...prev, ...links]);
+    setDrivePickerOpen(false);
     if (links.length > 0) {
       setActiveStep(serverAuthenticated ? 1 : 2);
     }
@@ -183,13 +194,40 @@ function AppContent() {
             ) : (activeStep === 0 && serverAuthenticated) || (activeStep === 1 && !serverAuthenticated) ? (
               <Paper sx={{ p: 3 }}>
                 <Typography variant="h6" gutterBottom>
-                  Upload Your Spreadsheet
+                  Select Google Sheets to Process
                 </Typography>
                 <Typography variant="body2" color="text.secondary" paragraph>
-                  Upload a CSV or Excel file containing Google Sheets URLs. The tool will extract
-                  all valid Google Sheets links from your file.
+                  Choose sheets from your Google Drive or upload a file containing sheet URLs.
                 </Typography>
-                <FileUpload onLinksExtracted={handleLinksExtracted} />
+                
+                <Box sx={{ display: 'flex', gap: 2, mb: 3, flexDirection: { xs: 'column', sm: 'row' } }}>
+                  {accessToken && (
+                    <Button
+                      variant="contained"
+                      startIcon={<FolderOpen />}
+                      onClick={() => setDrivePickerOpen(true)}
+                      size="large"
+                      fullWidth
+                      sx={{ maxWidth: { sm: 250 } }}
+                    >
+                      Browse Google Drive
+                    </Button>
+                  )}
+                  <Typography variant="body2" color="text.secondary" sx={{ alignSelf: 'center' }}>
+                    OR
+                  </Typography>
+                  <Box sx={{ flexGrow: 1 }}>
+                    <FileUpload onLinksExtracted={handleLinksExtracted} />
+                  </Box>
+                </Box>
+
+                {extractedLinks.length > 0 && (
+                  <Box sx={{ mt: 2, p: 2, bgcolor: 'success.light', borderRadius: 1 }}>
+                    <Typography variant="body1" color="success.contrastText">
+                      ✓ {extractedLinks.length} sheet{extractedLinks.length > 1 ? 's' : ''} selected and ready to process
+                    </Typography>
+                  </Box>
+                )}
               </Paper>
             ) : (activeStep === 1 && serverAuthenticated) || (activeStep === 2 && !serverAuthenticated) ? (
               <Paper sx={{ p: 3 }}>
@@ -208,6 +246,15 @@ function AppContent() {
           </>
         )}
       </Container>
+      
+      {/* Drive Picker Dialog */}
+      <DrivePicker
+        open={drivePickerOpen}
+        onClose={() => setDrivePickerOpen(false)}
+        onSelect={handleDriveFilesSelected}
+        accessToken={accessToken}
+        multiple={true}
+      />
     </Box>
   );
 }

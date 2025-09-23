@@ -9,6 +9,7 @@ import processNoCopyRoutes from './routes/processNoCopy';
 import readSheetsRoutes from './routes/readSheets';
 import templateProcessorRoutes from './routes/templateProcessor';
 import batchProcessorRoutes from './routes/batchProcessor';
+import driveRoutes from './routes/drive';
 import { initializeServiceAccount } from './services/googleService';
 import { initializeServiceAccount as initServiceAccount } from './services/googleServiceAccount';
 
@@ -55,6 +56,7 @@ app.use('/api/process-no-copy', processNoCopyRoutes);
 app.use('/api/sheets', readSheetsRoutes);
 app.use('/api/template', templateProcessorRoutes);
 app.use('/api/batch', batchProcessorRoutes);
+app.use('/api/drive', driveRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
