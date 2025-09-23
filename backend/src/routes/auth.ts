@@ -35,18 +35,33 @@ const scopes = process.env.GOOGLE_SCOPES?.split(' ') || [
 ];
 
 router.get('/google', (req, res) => {
+  console.log('OAuth request initiated');
+  console.log('Client ID:', process.env.GOOGLE_CLIENT_ID ? 'Set' : 'Not set');
+  console.log('Client Secret:', process.env.GOOGLE_CLIENT_SECRET ? 'Set' : 'Not set');
+  console.log('Redirect URI:', getRedirectUri());
+  console.log('Scopes:', scopes);
+  
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: scopes,
-    prompt: 'consent',
-    // Force account selection for multiple accounts
-    authuser: -1
+    prompt: 'consent'
   });
+  
+  console.log('Generated auth URL:', authUrl);
   res.redirect(authUrl);
 });
 
 router.get('/google/callback', async (req, res) => {
-  const { code } = req.query;
+  const { code, error } = req.query;
+  
+  console.log('OAuth callback received');
+  console.log('Code:', code ? 'Present' : 'Not present');
+  console.log('Error:', error || 'None');
+
+  if (error) {
+    console.error('OAuth error:', error);
+    return res.redirect(`${process.env.FRONTEND_URL}/auth/error?message=${error}`);
+  }
 
   if (!code || typeof code !== 'string') {
     // Check if this is from the get-tokens script
