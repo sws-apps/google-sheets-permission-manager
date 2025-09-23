@@ -1,18 +1,25 @@
 # Google Sheets Permission Manager
 
-A web application that bulk processes Google Sheets URLs from CSV/XLSX files, automatically creates copies, and sets them to view-only access.
+A comprehensive web application with two main features:
+1. **Single Sheet Processor**: Bulk process Google Sheets URLs to create view-only copies
+2. **ERC Template Processor**: Extract and transform Employee Retention Credit data from Excel templates
 
 ## Features
 
+### Single Sheet Processor
 - **Dual Authentication Modes**: User authentication OR server-side authentication
-- **Full Google Drive Access**: Access any Google Sheets in your Drive (not limited to specific folders)
+- **Full Google Drive Access**: Access any Google Sheets in your Drive
 - Upload CSV/XLSX files containing Google Sheets URLs
-- Automatic extraction of all Google Sheets links from uploaded files
-- Bulk copy Google Sheets with a single click
-- Set all copied sheets to view-only (reader) access
+- Bulk copy Google Sheets and set to view-only access
 - Real-time progress tracking
 - Export results as CSV
-- Clean, intuitive Material-UI interface
+
+### ERC Template Processor
+- Extract data from Excel templates or Google Sheets URLs
+- Transform ERC data into organized structure
+- Export to multiple formats (Portal, Bulk Upload, CSV, Excel)
+- Validate data completeness and accuracy
+- Support for flexible template formats
 
 ## Authentication Modes
 
@@ -22,6 +29,12 @@ Each user logs in with their own Google account to process their sheets.
 ### 2. Server Authentication (Optional)
 Configure the server with a Google account's refresh token to allow anyone to process sheets without logging in. This uses YOUR Google Drive access.
 
+## Live Deployment
+
+🚀 **The application is deployed and available at:**
+- Frontend: `https://frontend-production-54d6.up.railway.app`
+- Backend API: `https://google-sheets-permission-manager-production.up.railway.app`
+
 ## Prerequisites
 
 1. Node.js (v14 or higher)
@@ -30,6 +43,42 @@ Configure the server with a Google account's refresh token to allow anyone to pr
 4. Google APIs enabled (Drive API)
 
 ## Setup Instructions
+
+## Deployment Guide
+
+### Railway Deployment
+
+The application is deployed on Railway with the following configuration:
+
+#### Backend Deployment
+1. **Environment Variables Required**:
+   ```
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
+   SESSION_SECRET=random_session_secret
+   FRONTEND_URL=your_frontend_railway_url
+   NODE_ENV=production
+   PORT=8080
+   GOOGLE_REFRESH_TOKEN=optional_for_server_auth
+   ```
+
+2. **Railway Settings**:
+   - Build Command: `npm install && npm run build`
+   - Start Command: `npm start`
+   - Health Check Path: `/api/health`
+   - Port: 8080
+
+#### Frontend Deployment
+1. **Environment Variables Required**:
+   ```
+   REACT_APP_API_URL=your_backend_railway_url
+   CI=false
+   ```
+
+2. **Railway Settings**:
+   - Build Command: `npm install && npm run build`
+   - Start Command: `npx serve -s build -l $PORT`
+   - Port: Automatically assigned by Railway
 
 ### 1. Google Cloud Console Setup
 
@@ -41,9 +90,13 @@ Configure the server with a Google account's refresh token to allow anyone to pr
    - Click "Create Credentials" > "OAuth client ID"
    - Choose "Web application"
    - Add authorized redirect URIs:
-     - `http://localhost:5001/api/auth/google/callback` (default)
-     - `http://localhost:5000/api/auth/google/callback` (alternative port)
-     - `http://localhost:3000/api/auth/google/callback` (if needed)
+     - For Local Development:
+       - `http://localhost:5001/api/auth/google/callback`
+       - `http://localhost:5000/api/auth/google/callback`
+       - `http://localhost:3000/api/auth/google/callback`
+     - For Production (Railway):
+       - `https://google-sheets-permission-manager-production.up.railway.app/api/auth/google/callback`
+       - Add your custom domain callbacks if applicable
    - Save the Client ID and Client Secret
 
 ### 2. Backend Setup
@@ -58,6 +111,8 @@ Edit `.env` and add your Google OAuth credentials:
 GOOGLE_CLIENT_ID=your_client_id_here
 GOOGLE_CLIENT_SECRET=your_client_secret_here
 SESSION_SECRET=generate_a_random_string_here
+FRONTEND_URL=http://localhost:3000
+PORT=5001
 ```
 
 Install dependencies and start the server:
@@ -98,16 +153,22 @@ Restart the server, and users can now process sheets without logging in!
 
 ## Usage
 
-### User Authentication Mode
-1. Open http://localhost:3000
-2. Click "Sign in with Google" and authorize
-3. Upload a CSV/Excel file with Google Sheets URLs
-4. Process the sheets
+### Production Usage
+1. Visit `https://frontend-production-54d6.up.railway.app`
+2. Choose between:
+   - **Single Sheet Processor**: Process Google Sheets URLs
+   - **ERC Template Processor**: Process ERC templates
 
-### Server Authentication Mode (if configured)
+### Local Development
 1. Open http://localhost:3000
-2. Upload a CSV/Excel file with Google Sheets URLs
-3. Process the sheets (no login required!)
+2. For Single Sheet Processor:
+   - Sign in with Google (if user auth)
+   - Upload CSV/Excel with Google Sheets URLs
+   - Process the sheets
+3. For ERC Template Processor:
+   - Upload Excel template or enter Google Sheets URL
+   - View extracted data
+   - Export in desired format
 
 ## File Format
 
@@ -137,20 +198,49 @@ When server authentication is enabled, the tool uses the Google account associat
 ### When Using User Authentication
 Each user processes sheets using their own Google account, so they can access any sheets they have permission to view.
 
+## Environment Variables Reference
+
+### Backend Environment Variables
+```bash
+# Google OAuth Configuration (Required)
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+# Session Configuration (Required)
+SESSION_SECRET=random_string_for_session_encryption
+
+# Server Configuration
+PORT=5001                    # Port for backend server
+NODE_ENV=development         # or 'production'
+FRONTEND_URL=http://localhost:3000  # Frontend URL for CORS
+
+# Optional - For Server Authentication
+GOOGLE_REFRESH_TOKEN=token_for_server_auth
+```
+
+### Frontend Environment Variables
+```bash
+# Backend API URL (Required for production)
+REACT_APP_API_URL=http://localhost:5001  # Backend API URL
+
+# For Railway deployment
+CI=false  # Prevents build failures due to warnings
+```
+
 ## Security Considerations
 
-### Server Authentication Security
-- The refresh token gives FULL access to your Google Drive
-- Only use this mode if you trust all users of your application
-- Consider creating a dedicated Google account for this purpose
-- Never expose the refresh token publicly
-- Use HTTPS in production
+### Authentication Security
+- OAuth tokens are stored securely in server sessions
+- Refresh tokens (if used) should be kept confidential
+- Always use HTTPS in production
+- Implement proper CORS configuration
 
-### General Security
-- Never commit your `.env` file
-- Implement rate limiting for API endpoints
-- Use secure session storage in production
-- Regularly rotate API keys
+### Best Practices
+- Never commit `.env` files to version control
+- Use environment-specific configurations
+- Regularly rotate API keys and secrets
+- Monitor API usage and implement rate limiting
+- Use dedicated service accounts for production
 
 ## Development
 
@@ -167,10 +257,26 @@ Each user processes sheets using their own Google account, so they can access an
 
 ## API Endpoints
 
+### Authentication
 - `GET /api/auth/server-status` - Check if server authentication is configured
-- `GET /api/auth/verify?server=true` - Verify authentication is working properly
-- `POST /api/process/sheets` - Process Google Sheets (supports both auth modes)
+- `GET /api/auth/verify` - Verify authentication status
+- `GET /api/auth/google` - Initiate Google OAuth flow
+- `GET /api/auth/google/callback` - OAuth callback
+- `POST /api/auth/logout` - Logout user
+
+### Single Sheet Processing
+- `POST /api/process/sheets` - Process Google Sheets URLs
 - `POST /api/upload/file` - Upload and parse CSV/XLSX files
+- `GET /api/health` - Health check endpoint
+
+### ERC Template Processing
+- `POST /api/template/extract` - Extract data from uploaded Excel
+- `POST /api/template/extract-from-sheets` - Extract from Google Sheets URL
+- `POST /api/template/transform` - Transform extracted data
+- `POST /api/template/export/:format` - Export data (json/csv/xlsx)
+- `POST /api/template/export/portal` - Export to portal format
+- `POST /api/template/export/bulk-upload` - Export to bulk upload format
+- `GET /api/template/sample-data` - Get sample ERC data
 
 ## Troubleshooting
 
@@ -236,6 +342,35 @@ If you're getting this error immediately when trying to process sheets:
 ### Testing with Public Sheets
 
 Use the included `test-public-sheets.csv` which contains publicly accessible Google Sheets that should work without any sharing requirements.
+
+## Project Structure
+
+```
+google-sheets-permission-manager/
+├── backend/
+│   ├── src/
+│   │   ├── routes/         # API routes
+│   │   ├── services/       # Business logic
+│   │   ├── utils/          # Utility functions
+│   │   └── index.ts        # Server entry point
+│   ├── package.json
+│   └── tsconfig.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/     # React components
+│   │   ├── services/       # API services
+│   │   └── App.tsx         # Main app component
+│   ├── package.json
+│   └── tsconfig.json
+└── README.md
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
 ## License
 
