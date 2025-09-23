@@ -23,8 +23,6 @@ import { ProcessSheets } from './components/ProcessSheets';
 import { TemplateProcessor } from './components/TemplateProcessor';
 import { BatchProcessor } from './components/BatchProcessor';
 import { DrivePicker } from './components/DrivePicker';
-import { PrivacyPolicy } from './components/PrivacyPolicy';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -263,18 +261,12 @@ function AppContent() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <AuthProvider>
-          <Routes>
-            <Route path="/" element={<AppContent />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<PrivacyPolicy />} />
-          </Routes>
-        </AuthProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

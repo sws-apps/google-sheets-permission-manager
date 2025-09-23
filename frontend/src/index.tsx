@@ -5,6 +5,7 @@ import './index.css';
 import App from './App';
 import { AuthSuccess } from './pages/AuthSuccess';
 import { AuthError } from './pages/AuthError';
+import { PrivacyPolicy } from './components/PrivacyPolicy';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
@@ -15,6 +16,8 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<PrivacyPolicy />} />
         <Route path="/auth/success" element={<AuthSuccess />} />
         <Route path="/auth/error" element={<AuthError />} />
       </Routes>
