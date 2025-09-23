@@ -30,23 +30,23 @@ router.post('/sheets', async (req, res) => {
   let drive: any;
 
   try {
-    // Try service account first (easiest!)
-    try {
-      drive = getServiceAccountDrive();
-      console.log('Using service account authentication');
-    } catch (serviceError) {
-      // Fall back to other auth methods
-      if (useServerAuth && process.env.GOOGLE_REFRESH_TOKEN) {
-        // Use OAuth refresh token
-        drive = getServiceDriveClient();
-        console.log('Using OAuth refresh token');
-      } else if (accessToken) {
-        // Use user authentication
-        drive = getUserDriveClient(accessToken, refreshToken);
-        console.log('Using user authentication');
-      } else {
+    // Check authentication methods in order of preference
+    if (useServerAuth && process.env.GOOGLE_REFRESH_TOKEN) {
+      // Use OAuth refresh token (server authentication)
+      drive = getServiceDriveClient();
+      console.log('Using OAuth refresh token (server auth)');
+    } else if (accessToken) {
+      // Use user authentication
+      drive = getUserDriveClient(accessToken, refreshToken);
+      console.log('Using user authentication');
+    } else {
+      // Try service account as last resort (if configured)
+      try {
+        drive = getServiceAccountDrive();
+        console.log('Using service account authentication');
+      } catch (serviceError) {
         return res.status(401).json({ 
-          error: 'No authentication configured. Please set up service account or OAuth.' 
+          error: 'Authentication required. Please sign in with Google or configure server authentication.' 
         });
       }
     }

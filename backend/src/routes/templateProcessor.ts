@@ -145,31 +145,20 @@ router.post('/extract-from-sheets', async (req: Request, res: Response) => {
 
     let excelBuffer: Buffer;
     
-    // First try to access as public sheet (no auth needed)
+    // Try to access as public sheet (no auth needed)
     const publicConverter = new PublicSheetsConverter();
     try {
       console.log('Attempting to access sheet as public (viewer access)...');
       excelBuffer = await publicConverter.convertPublicSheetsToExcel(sheetsUrl);
       console.log('Successfully accessed sheet with public viewer access');
     } catch (publicError) {
-      console.log('Public access failed, trying with service account...');
-      
-      // If public access fails, try with service account auth
-      let auth: any;
-      try {
-        const { getServiceDriveClient } = await import('../services/googleServiceAccount');
-        const drive = getServiceDriveClient();
-        auth = (drive as any).context._options.auth;
-        
-        // Try with authentication
-        const authConverter = new SheetsToExcelConverter(auth);
-        excelBuffer = await authConverter.convertSheetsToExcel(sheetsUrl);
-        console.log('Successfully accessed sheet with service account');
-      } catch (authError) {
-        // If both methods fail, return the public error as it's more relevant
-        console.error('Both public and authenticated access failed');
-        throw publicError;
-      }
+      // For now, only support public sheets since we're using OAuth
+      console.error('Failed to access sheet:', publicError);
+      return res.status(400).json({
+        success: false,
+        error: 'Failed to access Google Sheet. Please ensure the sheet is publicly accessible (Anyone with link can view) or try signing in first.',
+        details: publicError instanceof Error ? publicError.message : 'Access denied'
+      });
     }
     
     // Now process the Excel buffer through the same pipeline as file upload
@@ -270,6 +259,14 @@ router.post('/extract-from-sheets', async (req: Request, res: Response) => {
  */
 router.get('/service-account-email', (req: Request, res: Response) => {
   try {
+    // Check if we're using OAuth instead of service account
+    if (!process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH && !process.env.GOOGLE_SERVICE_ACCOUNT_KEY) {
+      return res.status(503).json({
+        success: false,
+        error: 'This instance uses OAuth authentication. Please ensure sheets are publicly accessible (Anyone with link can view).'
+      });
+    }
+    
     const email = getServiceAccountEmail();
     if (!email) {
       return res.status(503).json({
@@ -683,7 +680,42 @@ router.get('/template-info', (req: Request, res: Response) => {
  */
 router.get('/sample-data', (req: Request, res: Response) => {
   try {
-    const { sampleERCData } = require('../data/sampleERCData');
+    // Try to load sample data, but handle if it doesn't exist
+    let sampleERCData;
+    try {
+      const module = require('../data/sampleERCData');
+      sampleERCData = module.sampleERCData;
+    } catch (loadError) {
+      console.log('Sample data file not found, returning default sample');
+      // Return a minimal sample if the file doesn't exist
+      return res.json({
+        success: true,
+        data: {
+          companyInfo: {
+            filerRemarks: 'Sample Company',
+            fullTimeW2Count2019: 50,
+            fullTimeW2Count2020: 48,
+            fullTimeW2Count2021: 52
+          },
+          grossReceipts: {
+            2019: { Q1: 100000, Q2: 110000, Q3: 105000, Q4: 115000 },
+            2020: { Q1: 95000, Q2: 80000, Q3: 85000, Q4: 90000 },
+            2021: { Q1: 92000, Q2: 95000, Q3: 98000, Q4: 100000 }
+          }
+        },
+        validation: { isValid: true, missingFields: [], invalidFields: [] },
+        warnings: ['Using minimal sample data'],
+        metrics: {
+          averageEmployeeCount: 50,
+          totalRetentionCreditWages: 0,
+          eligibleQuarters: { 2020: {}, 2021: {} }
+        }
+      });
+    }
+    
+    if (!sampleERCData) {
+      throw new Error('Sample data is undefined');
+    }
     
     // Calculate metrics for the sample data
     const totalRetentionCreditWages = 

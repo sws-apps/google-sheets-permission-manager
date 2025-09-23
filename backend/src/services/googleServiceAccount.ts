@@ -52,4 +52,9 @@ export const getServiceDriveClient = () => {
   return driveService;
 };
 
-export const getServiceAccountEmail = () => serviceAccountEmail;
+export const getServiceAccountEmail = () => {
+  if (!serviceAccountEmail) {
+    return null;
+  }
+  return serviceAccountEmail;
+};
