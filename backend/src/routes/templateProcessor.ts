@@ -680,42 +680,7 @@ router.get('/template-info', (req: Request, res: Response) => {
  */
 router.get('/sample-data', (req: Request, res: Response) => {
   try {
-    // Try to load sample data, but handle if it doesn't exist
-    let sampleERCData;
-    try {
-      const module = require('../data/sampleERCData');
-      sampleERCData = module.sampleERCData;
-    } catch (loadError) {
-      console.log('Sample data file not found, returning default sample');
-      // Return a minimal sample if the file doesn't exist
-      return res.json({
-        success: true,
-        data: {
-          companyInfo: {
-            filerRemarks: 'Sample Company',
-            fullTimeW2Count2019: 50,
-            fullTimeW2Count2020: 48,
-            fullTimeW2Count2021: 52
-          },
-          grossReceipts: {
-            2019: { Q1: 100000, Q2: 110000, Q3: 105000, Q4: 115000 },
-            2020: { Q1: 95000, Q2: 80000, Q3: 85000, Q4: 90000 },
-            2021: { Q1: 92000, Q2: 95000, Q3: 98000, Q4: 100000 }
-          }
-        },
-        validation: { isValid: true, missingFields: [], invalidFields: [] },
-        warnings: ['Using minimal sample data'],
-        metrics: {
-          averageEmployeeCount: 50,
-          totalRetentionCreditWages: 0,
-          eligibleQuarters: { 2020: {}, 2021: {} }
-        }
-      });
-    }
-    
-    if (!sampleERCData) {
-      throw new Error('Sample data is undefined');
-    }
+    const { sampleERCData } = require('../data/sampleERCData');
     
     // Calculate metrics for the sample data
     const totalRetentionCreditWages = 
