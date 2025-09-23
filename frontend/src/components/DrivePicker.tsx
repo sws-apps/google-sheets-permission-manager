@@ -7,9 +7,9 @@ import {
   Button,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
-  ListItemSecondaryAction,
   TextField,
   IconButton,
   Typography,
@@ -210,36 +210,36 @@ export const DrivePicker: React.FC<DrivePickerProps> = ({
           ) : (
             <List>
               {files.map((file) => (
-                <ListItem 
-                  key={file.id}
-                  button
-                  onClick={() => handleToggleSelect(file.id)}
-                  selected={selectedFiles.has(file.id)}
-                >
-                  <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      checked={selectedFiles.has(file.id)}
-                      tabIndex={-1}
-                      disableRipple
+                <ListItem key={file.id} disablePadding>
+                  <ListItemButton
+                    onClick={() => handleToggleSelect(file.id)}
+                    selected={selectedFiles.has(file.id)}
+                  >
+                    <ListItemIcon>
+                      <Checkbox
+                        edge="start"
+                        checked={selectedFiles.has(file.id)}
+                        tabIndex={-1}
+                        disableRipple
+                      />
+                    </ListItemIcon>
+                    <ListItemIcon>
+                      <Description />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={file.name}
+                      secondary={
+                        <Box>
+                          <Typography variant="caption" display="block">
+                            Modified: {formatDate(file.modifiedTime)}
+                          </Typography>
+                          {file.shared && (
+                            <Chip label="Shared" size="small" sx={{ mt: 0.5 }} />
+                          )}
+                        </Box>
+                      }
                     />
-                  </ListItemIcon>
-                  <ListItemIcon>
-                    <Description />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={file.name}
-                    secondary={
-                      <Box>
-                        <Typography variant="caption" display="block">
-                          Modified: {formatDate(file.modifiedTime)}
-                        </Typography>
-                        {file.shared && (
-                          <Chip label="Shared" size="small" sx={{ mt: 0.5 }} />
-                        )}
-                      </Box>
-                    }
-                  />
+                  </ListItemButton>
                 </ListItem>
               ))}
             </List>
