@@ -66,8 +66,20 @@ function AppContent() {
   };
 
   const handleDriveFilesSelected = (files: any[]) => {
-    const links = files.map(file => file.webViewLink);
-    setExtractedLinks(prev => [...prev, ...links]);
+    console.log('Selected files from Drive:', files);
+    const links = files.map(file => {
+      // Prefer webViewLink, but fallback to constructing URL from ID
+      if (file.webViewLink) {
+        return file.webViewLink;
+      } else if (file.id) {
+        // Construct the standard Google Sheets URL format
+        return `https://docs.google.com/spreadsheets/d/${file.id}/edit`;
+      }
+      return null;
+    }).filter(link => link !== null);
+    
+    console.log('Extracted links:', links);
+    setExtractedLinks(links); // Replace instead of append to avoid duplicates
     setDrivePickerOpen(false);
     if (links.length > 0) {
       setActiveStep(serverAuthenticated ? 1 : 2);
