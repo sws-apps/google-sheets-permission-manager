@@ -326,6 +326,45 @@ const links = files.map(file => {
 ### Issue: Authentication lost on page refresh
 **Solution**: Check localStorage for tokens, verify AuthContext is loading tokens on mount
 
+## Key Prompts Used During Implementation
+
+### Initial Problem Statement
+**User**: "sample data is not loading on the app.. please only do this. dont add anything. dont create fallback"
+
+### OAuth Implementation Request
+**User**: "what does the switch to sheet manager do? if i sign in with google, what will happen next?"
+
+### Error Troubleshooting
+**User**: "i tested this feature, when i click the sign in with google button, it redirect me to this link [...] then once i choose my google account - it gives me 500 (internal server error)"
+
+### Google Cloud Console Configuration
+**User**: "app should not be in test mode but in production mode. can you guide me with the steps on how to configure the oath consent screen?"
+
+### Feature Request - Drive Browser
+**User**: "on the sheet manager, we need to have a way for users to select which sheet or file in the drive they need to upload or process, that's the reason why we added the sign in with google feature"
+
+### Privacy Policy Implementation
+**User**: "for now, create me a privacy policy page with standard privacy policy content for this app.then send me the link for it"
+
+### Routing Fix
+**User**: "still the file has no privacy standard content.. please dont create any fallback for this app just fix the privacy page to show contents"
+
+### Production Deployment Issues
+**User**: "this is the railway actual values for front end frontend-production-54d6.up.railway.app Port 8080"
+**User**: "here is for backend : google-sheets-permission-manager-production.up.railway.app Port 8080"
+
+### Drive Picker Bug Report
+**User**: "i tested again the sheets manager, the upload file is working perfectly. but when i try to select the browse google drive to select the file to process - it not working"
+
+### Documentation Request
+**User**: "lets update the process doc regarding this new update for the sheet manager when how to make the sign in with google work, all the steps we've taken, errors encountered and fixes. as well as key learnings and takeaways"
+
+### Key Development Approach Highlights
+- **No Fallbacks Philosophy**: User consistently requested fixing issues directly without creating workarounds
+- **Incremental Problem Solving**: Each error was addressed systematically
+- **Production-First Mindset**: Focus on getting features working in production on Railway
+- **User-Centric Implementation**: Features driven by specific user needs (Drive browser for file selection)
+
 ## Future Improvements
 1. Implement token refresh mechanism for expired tokens
 2. Add OAuth scope management UI
