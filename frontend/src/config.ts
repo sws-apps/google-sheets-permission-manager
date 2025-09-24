@@ -4,7 +4,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 // Use environment variable or fallback to localhost
 // In production, REACT_APP_API_URL must be set to the backend URL
 export const API_BASE_URL = process.env.REACT_APP_API_URL || 
-  (isDevelopment ? 'http://localhost:5001' : 'https://backend-production-3a0f.up.railway.app');
+  (isDevelopment ? 'http://localhost:5001' : 'https://google-sheets-permission-manager-production.up.railway.app');
 
 export const API_ENDPOINTS = {
   // Auth endpoints
