@@ -23,6 +23,7 @@ import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import { ReadSheets } from './ReadSheets';
 import { TemplateProcessor } from './TemplateProcessor';
+import { API_BASE_URL } from '../config';
 
 interface ProcessResult {
   originalUrl: string;
@@ -34,8 +35,6 @@ interface ProcessResult {
 interface ProcessSheetsProps {
   links: string[];
 }
-
-const API_BASE_URL = 'http://localhost:5000'; // Force correct port
 
 export const ProcessSheets: React.FC<ProcessSheetsProps> = ({ links }) => {
   const { accessToken, refreshToken, serverAuthenticated, authMode } = useAuth();

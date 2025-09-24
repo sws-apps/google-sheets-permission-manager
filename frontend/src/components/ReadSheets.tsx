@@ -30,6 +30,7 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 interface ReadSheetsProps {
   links: string[];
@@ -46,8 +47,6 @@ interface SheetData {
     values: any[][];
   }[];
 }
-
-const API_BASE_URL = 'http://localhost:5000';
 
 export const ReadSheets: React.FC<ReadSheetsProps> = ({ links }) => {
   const { accessToken, refreshToken, serverAuthenticated } = useAuth();

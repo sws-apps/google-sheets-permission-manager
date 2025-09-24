@@ -14,12 +14,11 @@ import {
 } from '@mui/material';
 import { CloudUpload, Description } from '@mui/icons-material';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 interface FileUploadProps {
   onLinksExtracted: (links: string[]) => void;
 }
-
-const API_BASE_URL = 'http://localhost:5000'; // Force correct port
 
 export const FileUpload: React.FC<FileUploadProps> = ({ onLinksExtracted }) => {
   const [isLoading, setIsLoading] = useState(false);
